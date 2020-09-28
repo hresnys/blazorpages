@@ -1,7 +1,4 @@
 name: DeployToGitHubPages
-env:
-  PUBLISH_DIR: bin/Release/netstandard2.1/publish/wwwroot
-
 # Controls when the action will run
 on:
   push:
@@ -15,3 +12,13 @@ jobs:
 
     - name: Publish app
       run: dotnet publish -c Release
+      
+    - name: Deploy
+      if: ${{github.ref == 'refs/heads/master'}}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: blazorpages/bin/Release/netstandard2.1/publish/wwwroot
+        allow_empty_commit: false
+        keep_files: false
+        force_orphan: true
